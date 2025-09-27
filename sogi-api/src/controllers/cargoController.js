@@ -1,5 +1,16 @@
+import Cargo from "../models/cargoModel.js";
 import { saveAccessLog, saveErrorLog, saveActionLog } from "../utils/services/logs.js";
-import  Cargo  from "../models/cargoModel.js";
+
+/** helpers locais */
+const ok = (res, status, data) => res.status(status).json(data);
+const fail = async (req, res, status, msg) => {
+  await saveErrorLog(req, msg);
+  return res.status(status).json({ message: msg });
+};
+const ALLOWED_FIELDS = ["nome"];
+const pick = (obj, allow = ALLOWED_FIELDS) =>
+  Object.fromEntries(Object.entries(obj || {}).filter(([k]) => allow.includes(k)));
+
 export async function getCargos(req, res) {
   try {
     await saveAccessLog(req.session?.userdata?._id, req, "Listar cargos");
@@ -8,6 +19,7 @@ export async function getCargos(req, res) {
       page: parseInt(page, 10) || 1,
       limit: parseInt(limit, 10) || 10,
       sort: { createdAt: -1 },
+      lean: true,
     };
     const cargos = await Cargo.paginate({}, options);
     return ok(res, 200, cargos);
@@ -20,7 +32,7 @@ export async function getCargos(req, res) {
 export async function getCargoById(req, res) {
   try {
     await saveAccessLog(req.session?.userdata?._id, req, "Buscar cargo por ID");
-    const cargo = await Cargo.findById(req.params.id);
+    const cargo = await Cargo.findById(req.params.id).lean();
     if (!cargo) return ok(res, 404, { message: "Cargo não encontrado" });
     return ok(res, 200, cargo);
   } catch (err) {
@@ -47,7 +59,7 @@ export async function updateCargo(req, res) {
     const updated = await Cargo.findByIdAndUpdate(
       req.params.id,
       { $set: data },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true, lean: true }
     );
     if (!updated) return ok(res, 404, { message: "Cargo não encontrado" });
     await saveActionLog(req, `Atualizado cargo ${updated._id}`);
@@ -60,7 +72,7 @@ export async function updateCargo(req, res) {
 
 export async function deleteCargo(req, res) {
   try {
-    const deleted = await Cargo.findByIdAndDelete(req.params.id);
+    const deleted = await Cargo.findByIdAndDelete(req.params.id).lean();
     if (!deleted) return ok(res, 404, { message: "Cargo não encontrado" });
     await saveActionLog(req, `Deletado cargo ${deleted._id}`);
     return ok(res, 200, deleted);
@@ -69,4 +81,3 @@ export async function deleteCargo(req, res) {
     return fail(req, res, 400, `Erro ao deletar cargo: ${err.message}`);
   }
 }
-
