@@ -1,24 +1,25 @@
-/* Reset básico */
+/* NÃO definimos mais background no body pra não afetar outras páginas */
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
+
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif;
-  color: #e5eef7;
-  background: #0f1b27; /* fallback sob o gradiente */
 }
 
-/* Página */
-.page {
+/* ========= Login (escopado) ========= */
+.page-login {
   position: relative;
   min-height: 100vh;
   display: grid;
   place-items: center;
   overflow: hidden;
+  color: #e5eef7;                 /* cor do texto do login */
+  background: #0f1b27;            /* fallback sob o gradiente */
 }
 
 /* Fundo com gradiente radial azul escuro */
-.bg {
+.page-login .bg {
   position: absolute;
   inset: 0;
   background:
@@ -29,20 +30,19 @@ body {
       rgba(15, 27, 39, 0.9) 100%
     ),
     #0f1b27;
-  /* Vinheta suave nas bordas */
   box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.45);
   z-index: 0;
 }
 
 /* Card central */
-.card {
+.page-login .card {
   position: relative;
   z-index: 1;
   width: 92%;
   max-width: 520px;
   padding: 28px 32px 22px;
   border-radius: 6px;
-  background: rgba(38, 50, 61, 0.82);               /* cinza-azulado translúcido */
+  background: rgba(38, 50, 61, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow:
     0 18px 45px rgba(0, 0, 0, 0.45),
@@ -51,30 +51,26 @@ body {
 }
 
 /* Título SOGI */
-.title {
+.page-login .title {
   margin: 0 0 22px;
   text-align: center;
   font-size: 36px;
   font-weight: 800;
   letter-spacing: 0.5px;
-  color: #2f80ff; /* azul vivo como no print */
+  color: #2f80ff;
 }
 
 /* Formulário */
-.form {
-  display: grid;
-  gap: 10px;
-}
-
-.label {
+.page-login .form { display: grid; gap: 10px; }
+.page-login .label {
   font-size: 12px;
   font-weight: 600;
   color: #c7d1db;
   margin-top: 6px;
 }
 
-/* Inputs estilo “pill” brancos */
-.input {
+/* Inputs brancos */
+.page-login .input {
   width: 100%;
   height: 34px;
   padding: 6px 12px;
@@ -85,15 +81,15 @@ body {
   outline: none;
   transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease;
 }
-.input::placeholder { color: #8aa0b4; }
-.input:focus {
+.page-login .input::placeholder { color: #8aa0b4; }
+.page-login .input:focus {
   border-color: #2f80ff;
   box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.25);
 }
-.input:active { transform: translateY(0.5px); }
+.page-login .input:active { transform: translateY(0.5px); }
 
-/* Botão “Entrar” fino e branco */
-.btn {
+/* Botão primário */
+.page-login .btn {
   margin-top: 12px;
   height: 34px;
   border: 0;
@@ -106,11 +102,11 @@ body {
   transition: transform .05s ease, box-shadow .15s ease, background .15s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,.25);
 }
-.btn:hover { box-shadow: 0 6px 16px rgba(0,0,0,.3); }
-.btn:active { transform: translateY(1px); }
+.page-login .btn:hover { box-shadow: 0 6px 16px rgba(0,0,0,.3); }
+.page-login .btn:active { transform: translateY(1px); }
 
-/* Link "Criar Conta" */
-.link {
+/* Link secundário */
+.page-login .link {
   display: block;
   width: 100%;
   margin: 10px auto 0;
@@ -123,37 +119,37 @@ body {
   padding: 6px 8px;
   transition: color .15s ease, text-shadow .15s ease;
 }
-.link:hover {
+.page-login .link:hover {
   color: #ffffff;
   text-shadow: 0 0 8px rgba(255,255,255,.25);
 }
 
-/* Mensagem de erro */
-.error {
+/* Mensagens */
+.page-login .error {
   min-height: 1rem;
   margin: 6px 0 4px;
   font-size: 13px;
   color: #ef4444;
 }
+.page-login .ok {
+  min-height: 1rem;
+  margin: 6px 0 4px;
+  font-size: 13px;
+  color: #34d399; /* verde */
+}
 
-/* Wrapper para mostrar o ícone de seta no select (estilo do print) */
-.select-wrap {
-  position: relative;
+/* Select custom */
+.page-login .select-wrap { position: relative; }
+.page-login .select {
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  padding-right: 36px;
 }
-.select {
-  appearance: none;              /* remove setas nativas */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding-right: 36px;           /* espaço para a “seta” */
-}
-/* setinha suave à direita */
-.select-wrap::after {
+.page-login .select-wrap::after {
   content: "";
   position: absolute;
   right: 12px;
   top: 50%;
-  width: 10px;
-  height: 10px;
+  width: 10px; height: 10px;
   transform: translateY(-50%) rotate(45deg);
   border-right: 2px solid #9aa8b6;
   border-bottom: 2px solid #9aa8b6;
@@ -161,9 +157,8 @@ body {
   opacity: .9;
 }
 
-
-/* Responsivo leve */
+/* Responsivo */
 @media (max-width: 420px) {
-  .title { font-size: 30px; }
-  .card { padding: 24px; }
+  .page-login .title { font-size: 30px; }
+  .page-login .card { padding: 24px; }
 }

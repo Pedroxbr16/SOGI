@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { getCargoOptions } from "../services/cargosService"; 
+import { getCargoOptions } from "../services/cargosService";
+import { useNavigate } from "react-router-dom";
 import "../assets/css/pages/login.css";
 
-export default function App() {
+export default function Login() {
   const { signIn, signUp } = useAuth();
+  const navigate = useNavigate();
 
   const [mode, setMode] = useState("login"); // "login" | "signup"
   const isSignup = mode === "signup";
@@ -16,7 +18,7 @@ export default function App() {
   // cadastro
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
-  const [cargo, setCargo] = useState("");      // vai guardar o _id do cargo
+  const [cargo, setCargo] = useState("");      // armazena _id do cargo
   const [emailCad, setEmailCad] = useState("");
   const [senhaCad, setSenhaCad] = useState("");
   const [confirmaCad, setConfirmaCad] = useState("");
@@ -27,12 +29,11 @@ export default function App() {
   const [submitting, setSubmitting] = useState(false);
 
   // CARGOS
-  const [cargoOpts, setCargoOpts] = useState([]); // [{value:_id, label:nome}]
+  const [cargoOpts, setCargoOpts] = useState([]);
   const [loadingCargos, setLoadingCargos] = useState(false);
   const [cargoErr, setCargoErr] = useState("");
 
   useEffect(() => {
-    // carrega opções do select ao entrar no modo signup
     if (!isSignup) return;
     let mounted = true;
 
@@ -72,7 +73,7 @@ export default function App() {
         const resp = await signUp({
           cpf: onlyDigits(cpf),
           nome,
-          cargo,                 // aqui vai o _id do cargo selecionado
+          cargo,
           email: emailCad,
           senha: senhaCad,
         });
@@ -86,6 +87,7 @@ export default function App() {
       } else {
         await signIn({ email, senha: password });
         setOkMsg("Login realizado!");
+        navigate("/home", { replace: true });  // redireciona após login
       }
     } catch (err) {
       const msg = err?.response?.data?.message || err.message || "Erro inesperado";
@@ -96,8 +98,9 @@ export default function App() {
   };
 
   return (
-    <div className="page">
+    <div className="page-login">
       <div className="bg" />
+
       <main className="card" role="region" aria-label="Login SOGI">
         <h1 className="title">SOGI</h1>
         <p className="subtitle" style={{ textAlign: "center", color: "#b4b4b4ff" }}>
@@ -141,8 +144,6 @@ export default function App() {
                   <option value="" disabled>
                     {loadingCargos ? "Carregando cargos..." : "Selecione…"}
                   </option>
-
-                  {/* >>> opções vindas do backend <<< */}
                   {cargoOpts.map(opt => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
