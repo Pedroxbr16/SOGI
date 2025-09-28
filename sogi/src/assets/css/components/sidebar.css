@@ -1,0 +1,137 @@
+/* ===========================
+   SIDEBAR OVERLAY + DRAWER
+   =========================== */
+
+/* Ajuste esta largura para casar com a coluna dos ícones */
+:root {
+  --icon-strip: 70px; /* 56–64px costuma ficar perfeito */
+}
+
+/* Overlay escuro por trás da sidebar */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 10, 20, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility .2s ease;
+  z-index: 999; /* abaixo do drawer, acima do app */
+}
+.sidebar-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Drawer lateral (abre da esquerda por cima do app) */
+.sidebar-drawer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 240px;
+
+  /* Faixa clara só até a coluna de ícones, depois escuro.
+     1º gradiente: uma “sombra” suave logo após a faixa clara (opcional).
+     2º gradiente: claro -> escuro com quebras em pixels. */
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,0) calc(var(--icon-strip) - 2px),
+      rgba(0,0,0,.35) calc(var(--icon-strip) + 10px),
+      rgba(0,0,0,0) calc(var(--icon-strip) + 22px)
+    ),
+    linear-gradient(90deg,
+      #1B2C56 0,
+      #1B2C56 var(--icon-strip),  /* fim do claro, alinhado ao ícone */
+      #101729 var(--icon-strip),  /* começa escuro imediatamente */
+      #0B1324 100%
+    );
+
+  color: #cfe3ff;
+  border-right: 1px solid rgba(255,255,255,.06);
+  box-shadow: 8px 0 28px rgba(0,0,0,.35);
+  transform: translateX(-100%);
+  transition: transform .25s ease;
+  z-index: 1000; /* acima do overlay */
+}
+.sidebar-drawer.open {
+  transform: translateX(0);
+}
+
+/* Cabeçalho da sidebar */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+}
+.sidebar-header .burger {
+  border: 0;
+  border-radius: 8px;
+  background: #11223b;
+  color: #9fb8ff;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+.sidebar-header .burger:hover {
+  filter: brightness(1.05);
+}
+.sidebar-header .logo {
+  margin-left: 26px;
+  font-weight: 800;
+  font-size: 22px;
+  color: #3ea0ff; /* “SOGI” azul */
+}
+
+/* Navegação */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 4px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 10px 12px;
+  margin: 2px 6px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #bcd1ff;
+  font-weight: 600;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.nav-item .ico {
+  width: 18px;
+  text-align: center;
+  opacity: .95;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,.06);
+  color: #e7f0ff;
+}
+
+/* Estado selecionado (como no print) */
+.nav-item.active {
+  background: rgba(27, 44, 86, 0.9);
+  border: 1px solid rgba(255,255,255,.08);
+  color: #cfe3ff;
+}
+
+/* Rodapé (ex.: Meu Perfil) */
+.sidebar-foot {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+
+/* (Opcional) Ajuste fino para ícones emoji/imagem ficarem
+   alinhados exatamente na faixa clara */
+.nav-item .ico,
+.sidebar-header .burger {
+  margin-left: 6px; /* empurra um pouco para dentro da tira clara */
+}

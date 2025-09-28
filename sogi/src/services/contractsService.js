@@ -4,7 +4,7 @@ import http from "./http";
 /**
  * Contrato
  * {
- *   nome: string,
+ *   empresa: string,
  *   machine: string[],           // ex.: ["Guindaste (100-06)", "Empilhadeira (ED10-16)"]
  *   status: string,              // ObjectId de StatusContract
  *   coordenador: string,         // ObjectId de User
@@ -28,14 +28,14 @@ export async function getContractById(id) {
 
 export async function createContract(payload) {
   // validação básica
-  if (!payload?.nome) throw new Error("Campo 'nome' é obrigatório");
+  if (!payload?.empresa) throw new Error("Campo 'empresa' é obrigatório");
   if (!Array.isArray(payload?.machine)) throw new Error("Campo 'machine' deve ser um array");
   if (!payload?.status) throw new Error("Campo 'status' é obrigatório");
   if (!payload?.coordenador) throw new Error("Campo 'coordenador' é obrigatório");
   if (!payload?.vencimento) throw new Error("Campo 'vencimento' é obrigatório");
 
   const body = {
-    nome: String(payload.nome).trim(),
+    empresa: String(payload.empresa).trim(),
     machine: payload.machine.map(String),
     status: String(payload.status),
     coordenador: String(payload.coordenador),
@@ -49,7 +49,7 @@ export async function createContract(payload) {
 export async function updateContract(id, patch) {
   if (!id) throw new Error("id é obrigatório");
   const body = {};
-  if (patch?.nome != null) body.nome = String(patch.nome).trim();
+  if (patch?.empresa != null) body.empresa = String(patch.empresa).trim();
   if (patch?.machine != null) body.machine = Array.isArray(patch.machine) ? patch.machine.map(String) : [];
   if (patch?.status != null) body.status = String(patch.status);
   if (patch?.coordenador != null) body.coordenador = String(patch.coordenador);

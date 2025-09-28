@@ -71,9 +71,9 @@ contractRouter.get("/:id", getContractById);
  *         application/json:
  *           schema:
  *             type: object
- *             required: [nome, machine, status, coordenador, vencimento]
+ *             required: [empresa, machine, status, coordenador, vencimento]
  *             properties:
- *               nome:
+ *               empresa:
  *                 type: string
  *                 example: "Contrato de testes"
  *               machine:

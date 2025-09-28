@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
 const contractSchema = new mongoose.Schema({
-    nome: { type: String, required: true },
+    empresa: { type: String, required: true },
     machine: { type: [String], required: true },
     status: { type: mongoose.Schema.Types.ObjectId, ref: 'StatusContract', required: true },
     coordenador: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
